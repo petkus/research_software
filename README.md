@@ -1,4 +1,4 @@
-# sage_scripts
+# research_software
 
 This repository contains various software written in sage to do various
 mathematical calculations
