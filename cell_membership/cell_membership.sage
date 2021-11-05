@@ -1,6 +1,4 @@
 # CELL MEMBERSHIP
-
-#TODO
 D = DiGraph(G)
 
 # V is vertex set of D. V is number of verticies

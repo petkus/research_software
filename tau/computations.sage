@@ -1,25 +1,12 @@
 load('tau.sage')
-# EXAMPLES ****************************************************************************
-
-# WORK on Random Graph ****************************************************************
+# Complete Graphs
 if False:
-    G = graphs.CompleteGraph(4)
+    for n in range(3):
+        G = graphs.CompleteGraph(n + 3)
+        print(tau_test_convexity(G))
+#OUTPUT ALL TRUE
 
-    # G is a random graph on 4 verticies
-    G = graphs.RandomGNP(4,2/3)
-
-    # Assigning a variable z[i] to each edge of a compiled graph
-    G.allow_multiple_edges(True)
-    polys = PolynomialRing(QQ,len(G.edges()),"z").fraction_field()
-    z = polys.gens()
-    i = 0
-    for u,v in G.edges(labels=0):
-        G.set_edge_label(u,v,z[i])
-        i += 1
-
-# Work on K4 ****************************************************************
-
-# WORK on Block Tower Graph *************************************************************
+# Block Tower Graph TODO CITE
 if False:
     T = {}
     R = {}
@@ -38,8 +25,8 @@ if False:
         else:
             Dif[n] = R[n]
 
+# Block Tower Graph Calculating Tau constant
 if False:
-    # Calculating Tau constant
     P = graphs.PathGraph(4)
     C = graphs.CycleGraph(4)
     G = P.cartesian_product(C)
@@ -58,20 +45,23 @@ if False:
     G.relabel()
     F = fosters(G)
     p = tau(G,F,polys)
-    print(p)
 
-# WORK ON SQUARE GRID GRAPH *************************************************************
+# Square Lattice Graph
 if False:
-    n = 5
-    G = graphs.Grid2dGraph(n,n)
+    for n in range(2,4):
+        G = graphs.Grid2dGraph(n,n)
+        print(tau_test_convexity(G))
+#OUTPUT ALL TRUE
 
-# WORK ON LADDER GRAPH *************************************************************
+# Ladder Graph
 if False:
-    n = 3
-    G = graphs.LadderGraph(n)
-    
+    for n in range(2,8):
+        G = graphs.LadderGraph(n)
+        print(n)
+        print(tau_test_convexity(G))
+#OUTPUT ALL TRUE
 
-# WORK ON BANANA GRAPH ****************************************************************
+# Banana Graph
 if False:
     answer = []
     answer_with_fosters = []
@@ -104,7 +94,7 @@ if False:
     graphic = contour_plot(f, (x,0,1), (y,0,1), fill=False, region=1-x-y,plot_points=300)
     show(graphic)
 
-# WORK ON Cube Graph ****************************************************************
+# Cube Graph
 if False:
     dimensions = 3
     edge_num = dimensions * 2^dimensions / 2
@@ -129,7 +119,21 @@ if False:
                            region=1/4-x-y, plot_points=300)
     show(graphic)
 
-# WORK ON Peterson Graph ****************************************************************
+# Cube Graph
+if True:
+    for n in range(2,5):
+        G = graphs.CubeGraph(n)
+        print(n)
+        print(tau_test_convexity(G))
+
+# Peterson Graph
+if False:
+    G = graphs.PetersenGraph()
+    print("Petersen Graph:")
+    print(tau_test_convexity(G))
+
+
+# Peterson Graph
 if False:
     G = graphs.PetersenGraph()
     edge_num = len(G.edges())
@@ -152,7 +156,7 @@ if False:
                            region=1/5-x-y, plot_points=300)
     show(graphic)
 
-# WORK ON Diamond Necklace ************************************************************
+# Diamond Necklace
 # Page 56 of Cinkir
 if False:
     t = 4
@@ -183,17 +187,6 @@ if False:
            ('00', str(n) + '3', b)]
     G = Graph(es)
     G.relabel()
-    # p = tau_using_fosters(G)
-    # p = tau(G,polys)
-    # f = p.substitute({z[0]:x, z[1]:y})
-    # graphic = contour_plot(f, (x,0,1/5), (y,0,1/5), fill=False,
-    #                        region=1/5-x-y, plot_points=300)
-    # show(graphic)
-
-
-
-
-# *************************************************************************************
 
 H = visualize(G)
 show(H)

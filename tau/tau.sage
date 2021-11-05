@@ -1,11 +1,13 @@
 from inspect import signature
 from sage.misc.prandom import uniform
 
-# Visualize graph G
+# Visualize graph G with assigned variables on each edge
 def visualize(G):
     H = G.plot(edge_labels=True)
     return H
 
+# Returns a ring of rational functions where the indeterminants are assigned to
+# the edge lengths of G
 def assignVariables(G):
     G.allow_multiple_edges(True)
     polys = PolynomialRing(QQ,len(G.edges()),"z").fraction_field()
@@ -27,7 +29,8 @@ def set_of_spanning_trees(G):
 def set_of_spanning_trees_helper(G):
     return {}
 
-# Tests whether the given function f is convex by randomly plotting points
+# Tests whether the given function f is convex by randomly plotting points.
+# Param_num should be the number of input variables for f
 def convexity_test(f, param_num, lower_bound = 0, upper_bound = 1, test_num = 500):
     x1 = []
     x2 = []
@@ -48,41 +51,10 @@ def convexity_test(f, param_num, lower_bound = 0, upper_bound = 1, test_num = 50
             return False
     return True
         
-
-# Returns the Canonical Divisor for G as a dictionary 
-# of the form {vertex v: integer D(v)}
-def canonical_divisor(G):
-    V = G.vertices()
-    D = {v:0 for v in V}
-    for v in V:
-        D[v] = G.degree(v) - 2
-    return D
-
-# Returns the edges incident to vertex v
-def star(v, G):
-    S = set()
-    for e in G.edges():
-        if v in e:
-            S.add(e)
-    return S
-
-# Returns the resulting divisor after chip firing at vertex v
-def vertex_fire(v, D, G):
-    D[v] = D[v] - G.degree(v)
-    for e in star(v, G):
-        w = filter(lambda s: s != v, e)[0]
-        D[w] = D[w] + 1
-    return D
-
-# Returns the resulting divisor after chip firing at vertex set S
-def fire(S, D, G):
-    for v in S:
-        D = vertexFire(v,D,G)
-    return D
-
 # Returns the laplacian_matrix with edge weights treated as resistances 
 # i.e L[i,i] = sum over e incident to i of 1/r(e)
 # i.e L[i,j] = 1/r(e) where e = (i,j)
+# polys should be a field containing indeterminants associated to the edge weights.
 def laplacian_matrix(G,polys):
     n = len(G.vertices())
     L = matrix(polys,n,n)
@@ -95,7 +67,7 @@ def laplacian_matrix(G,polys):
         L[j,i] -= 1/e[2]
     return L
 
-# As done in 4.3 of Metric graphs, cross ratios, and Rayleigh's laws
+# As done in 4.3 of https://arxiv.org/pdf/1810.02639.pdf
 # Returns the matrix with (x,y) entry equal to j_q(x,y)
 # polys is the fraction field containing the resistances on G
 def j_functions(q, G, polys):
@@ -116,8 +88,8 @@ def j_functions(q, G, polys):
 def res(v,w,G, polys):
     return j_functions(v,G, polys)[w,w]
 
-# Returns Foster's coefficient of given edge
-# polys is the fraction field containing the resistances on G
+# Returns a dictionary of the Foster's coefficients 
+# of the form {e: fosters coefficient of e}
 def fosters(G):
     W = 0
     E = set(G.edges())
@@ -259,9 +231,9 @@ def tau(G,F,polys):
         s += tau_summand(e,F,J,polys)
     return s
 
-# Returns a function whose inputs are indexed by the zs and whose output is the
-# tau constant
-# TODO
+# Returns a function whose inputs are indexed by a list zs and whose output is the
+# tau constant. Typically zs = polys.gens() should be the list of
+# indeterminants assigned to the edge lengths of G
 def tau_function(G,zs):
     F = fosters(G)
     i = 0
@@ -277,9 +249,9 @@ def tau_function(G,zs):
         return tau(Gc,Fc,QQ)
     return func
 
-# tests the convexity of the tau constant for a given graph G.
-#TODO
+# Tests the convexity of the tau constant for a given combinatorial graph G.
 def tau_test_convexity(G):
+    G.relabel()
     polys = assignVariables(G)
     z = polys.gens()
     f = tau_function(G,z)
@@ -288,4 +260,8 @@ def tau_test_convexity(G):
 # Finds the minimum value of tau for a given graph G with total length 1
 #TODO
 def tau_minimum(G):
-    return {}
+    G.relabel()
+    polys = assignVariables(G)
+    z = polys.gens()
+    f = tau_function(G,z)
+    
