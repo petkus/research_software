@@ -45,6 +45,8 @@ associated edge lengths of `G` (i.e. `z = polys.gens()`),
 
 
 
-TESTING:
-<img src="svgs/066eaf1d4b6be7af6c0b351be69fb149.svg?invert_in_darkmode" align=middle width=78.72922859999998pt height=22.465723500000017pt/>
+### Note for compiling Latex in README
+I am using the python script `readme2tex` (https://github.com/leegao/readme2tex). Just following the directions on their page was giving me troubles (it seemed to rely on RawGit https://rawgit.com/ which is shut down). Using the following command seems to work however!
+
+`python3 -m readme2tex --nocdn --readme INPUT.md --output README.md`
 
