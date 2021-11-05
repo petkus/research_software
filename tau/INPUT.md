@@ -45,3 +45,6 @@ associated edge lengths of `G` (i.e. `z = polys.gens()`),
 
 
 
+TESTING:
+$A + B+ C$
+

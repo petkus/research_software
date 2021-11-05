@@ -45,3 +45,6 @@ associated edge lengths of `G` (i.e. `z = polys.gens()`),
 
 
 
+TESTING:
+<img src="https://rawgit.com/in	git@github.com:petkus/research_software/tree/main/svgs/066eaf1d4b6be7af6c0b351be69fb149.svg?invert_in_darkmode" align=middle width=78.72922859999998pt height=22.465723500000017pt/>
+
