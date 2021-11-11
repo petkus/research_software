@@ -4,9 +4,14 @@ The aim of this project is to verify and prove the Tau constant is convex as a
 function of the edge lengths of <img src="svgs/5201385589993766eea584cd3aa6fa13.svg?invert_in_darkmode" align=middle width=12.92464304999999pt height=22.465723500000017pt/>
 
 The purpose of each file is as follows
-- `tau.sage` contains the functions and software used
-- `computations.sage` contains computations of examples using 'tau.sage'. I
-  will try to keep a list of verified results in this README.
+- `tau.sage` contains functions relating to the calculation of the tau constant
+- `fosters_expressions.sage` contains various functions in terms of fosters
+  coefficients I wanted to test for convexity.
+- `computations.sage` contains computations of examples using `tau.sage` and
+  `fosters.sage`. I will try to keep a list of verified results in this README.
+- `output.txt` is the output of `computations.txt` via the command `sage
+  computations.sage >> output.txt`
+- `old/` contains old code I am no longer using.
 
 ### For a definition of the tau constant see the following
 - https://arxiv.org/abs/math/0407427
@@ -42,6 +47,7 @@ associated edge lengths of `G` (i.e. `z = polys.gens()`),
 3. The ladder graph <img src="svgs/918f950bd703da97a26b0d821ca90d18.svg?invert_in_darkmode" align=middle width=56.69896979999999pt height=22.465723500000017pt/> up to <img src="svgs/e1c19934b0354cb428cd4183915b42dc.svg?invert_in_darkmode" align=middle width=40.00371704999999pt height=21.18721440000001pt/> layers
 4. <img src="svgs/34c759c10ccac82213a2aa1a2bed361b.svg?invert_in_darkmode" align=middle width=20.594674649999988pt height=22.465723500000017pt/> for any <img src="svgs/55a049b8f161ae7cfeb0197d75aff967.svg?invert_in_darkmode" align=middle width=9.86687624999999pt height=14.15524440000002pt/> (proven)
 5. The cube graph <img src="svgs/f4587d87b8a2920ce5a517d5ee1de24f.svg?invert_in_darkmode" align=middle width=138.097014pt height=22.465723500000017pt/> up to <img src="svgs/14d16c011d601ab1480487a911c760d0.svg?invert_in_darkmode" align=middle width=40.00371704999999pt height=21.18721440000001pt/>
+6. The Petersen Graph
 
 
 
