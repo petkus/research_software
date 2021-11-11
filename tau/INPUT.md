@@ -42,12 +42,18 @@ associated edge lengths of `G` (i.e. `z = polys.gens()`),
 
 ### Convexity has been verified for:
 
-1. $K_n$ up to $n = 6$ verticies
-2. The square grid $P_n \times P_n$ up to $n = 3$ layers
-3. The ladder graph $P_2 \times P_n$ up to $n = 7$ layers
-4. $B_n$ for any $n$ (proven)
-5. The cube graph $P_1^n = P_1 \times \dots \times P_1$ up to $n = 3$
-6. The Petersen Graph
+1. $K_n$ up to $n = 9$ vertices
+2. Complete bipartite graph up to $n = 9$ vertices on both partitions
+3. The square grid $P_n \times P_n$ up to $n = 9$ layers
+4. The ladder graph $P_2 \times P_n$ up to $n = 9$ layers
+5. The Wheel graph up to $n = 14$ spokes
+6. $B_n$ for any $n$ (proven)
+7. The cube graph $P_1^n = P_1 \times \dots \times P_1$ up to $n = 6$
+8. The Octahedral Graph
+9. The Tetrahedral Graph
+10. The Diamond Necklace with $t = 20$ 
+11. The Diamond Necklace with $t = 40$ 
+12. The Petersen Graph
 
 
 

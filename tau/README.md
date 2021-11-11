@@ -42,12 +42,18 @@ associated edge lengths of `G` (i.e. `z = polys.gens()`),
 
 ### Convexity has been verified for:
 
-1. <img src="svgs/96b697078d351b7b43bd5b5dce0254cd.svg?invert_in_darkmode" align=middle width=22.08723494999999pt height=22.465723500000017pt/> up to <img src="svgs/f7383cf663cc3fbf0211bdc91abca2d2.svg?invert_in_darkmode" align=middle width=40.00371704999999pt height=21.18721440000001pt/> verticies
-2. The square grid <img src="svgs/dc78b813ccb780b6209dc8237320b1cb.svg?invert_in_darkmode" align=middle width=58.27244774999999pt height=22.465723500000017pt/> up to <img src="svgs/14d16c011d601ab1480487a911c760d0.svg?invert_in_darkmode" align=middle width=40.00371704999999pt height=21.18721440000001pt/> layers
-3. The ladder graph <img src="svgs/918f950bd703da97a26b0d821ca90d18.svg?invert_in_darkmode" align=middle width=56.69896979999999pt height=22.465723500000017pt/> up to <img src="svgs/e1c19934b0354cb428cd4183915b42dc.svg?invert_in_darkmode" align=middle width=40.00371704999999pt height=21.18721440000001pt/> layers
-4. <img src="svgs/34c759c10ccac82213a2aa1a2bed361b.svg?invert_in_darkmode" align=middle width=20.594674649999988pt height=22.465723500000017pt/> for any <img src="svgs/55a049b8f161ae7cfeb0197d75aff967.svg?invert_in_darkmode" align=middle width=9.86687624999999pt height=14.15524440000002pt/> (proven)
-5. The cube graph <img src="svgs/f4587d87b8a2920ce5a517d5ee1de24f.svg?invert_in_darkmode" align=middle width=138.097014pt height=22.465723500000017pt/> up to <img src="svgs/14d16c011d601ab1480487a911c760d0.svg?invert_in_darkmode" align=middle width=40.00371704999999pt height=21.18721440000001pt/>
-6. The Petersen Graph
+1. <img src="svgs/96b697078d351b7b43bd5b5dce0254cd.svg?invert_in_darkmode" align=middle width=22.08723494999999pt height=22.465723500000017pt/> up to <img src="svgs/1340e88cf8c326584e11dc82510bb2d7.svg?invert_in_darkmode" align=middle width=40.00371704999999pt height=21.18721440000001pt/> vertices
+2. Complete bipartite graph up to <img src="svgs/1340e88cf8c326584e11dc82510bb2d7.svg?invert_in_darkmode" align=middle width=40.00371704999999pt height=21.18721440000001pt/> vertices on both partitions
+3. The square grid <img src="svgs/dc78b813ccb780b6209dc8237320b1cb.svg?invert_in_darkmode" align=middle width=58.27244774999999pt height=22.465723500000017pt/> up to <img src="svgs/1340e88cf8c326584e11dc82510bb2d7.svg?invert_in_darkmode" align=middle width=40.00371704999999pt height=21.18721440000001pt/> layers
+4. The ladder graph <img src="svgs/918f950bd703da97a26b0d821ca90d18.svg?invert_in_darkmode" align=middle width=56.69896979999999pt height=22.465723500000017pt/> up to <img src="svgs/1340e88cf8c326584e11dc82510bb2d7.svg?invert_in_darkmode" align=middle width=40.00371704999999pt height=21.18721440000001pt/> layers
+5. The Wheel graph up to <img src="svgs/dcf4c6ef50fbcd18d8edbf9c7b28db5e.svg?invert_in_darkmode" align=middle width=48.222926399999984pt height=21.18721440000001pt/> spokes
+6. <img src="svgs/34c759c10ccac82213a2aa1a2bed361b.svg?invert_in_darkmode" align=middle width=20.594674649999988pt height=22.465723500000017pt/> for any <img src="svgs/55a049b8f161ae7cfeb0197d75aff967.svg?invert_in_darkmode" align=middle width=9.86687624999999pt height=14.15524440000002pt/> (proven)
+7. The cube graph <img src="svgs/f4587d87b8a2920ce5a517d5ee1de24f.svg?invert_in_darkmode" align=middle width=138.097014pt height=22.465723500000017pt/> up to <img src="svgs/f7383cf663cc3fbf0211bdc91abca2d2.svg?invert_in_darkmode" align=middle width=40.00371704999999pt height=21.18721440000001pt/>
+8. The Octahedral Graph
+9. The Tetrahedral Graph
+10. The Diamond Necklace with <img src="svgs/6e828baa566af8538bd8a3feb71e1aea.svg?invert_in_darkmode" align=middle width=44.29214624999999pt height=21.18721440000001pt/> 
+11. The Diamond Necklace with <img src="svgs/3a442e7eb3c1f028fdbb8d31c6a8a85e.svg?invert_in_darkmode" align=middle width=44.29214624999999pt height=21.18721440000001pt/> 
+12. The Petersen Graph
 
 
 

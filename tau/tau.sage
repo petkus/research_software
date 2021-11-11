@@ -47,7 +47,7 @@ def subdivide(G,n):
 # param_num should be the number of input variables for f. If param_num is 0
 # then param_num is automatically set to len(signature(f).parameters)).
 def convexity_test(f, param_num = 0, lower_bound = 0, upper_bound = 1, test_num
-                   = 60, printing = False):
+                   = 100, printing = False):
     x1 = []
     x2 = []
     if param_num == 0:
@@ -319,19 +319,26 @@ def tau(G,polys=RR):
 
 # Returns a function whose input is the lengths of G and whose output is the
 # input_function applied to G
-def to_function(input_function, G, e = None, labels = True):
-    if e == None:
+def to_function(input_function, G, e = False, F = False, labels = True):
+    if not (e and F) and labels:
         def func(*args):
             assign_lengths(G, args)
             return input_function(G)
-    if e != None:
+    if e and not F and labels:
         def func(*args):
             assign_lengths(G, args)
-            return input_function(e,G)
-    if labels == False:
+            E = G.edges()
+            return {(e[0], e[1]): input_function(e,G) for e in E}
+    if not e and not F and not labels:
         def func(*args):
             assign_lengths(G, args)
             return input_function(G, labels=False)
+    if e and F and labels:
+        def func(*args):
+            assign_lengths(G, args)
+            E = G.edges()
+            F = fosters(G,resistance_matrix(G))
+            return {(e[0], e[1]) :input_function(e, F, G) for e in E}
     return func
 
 # Tests the convexity of the tau constant for a given combinatorial graph G.

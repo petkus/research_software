@@ -102,7 +102,7 @@ if True:
     test(G)
     print()
 
-if True:
+if False:
     # Diamond Necklace
     t = 20
     if False:
@@ -119,12 +119,12 @@ if True:
     test(G)
     print()
 
-if True:
-    N = 9
-    print("Testing Convexity for all graphs up to %i vertices"%N)
+if False:
+    K = 11
+    print("Testing Convexity for all graphs up to %i vertices"%K)
     convexity = True
-    for n in range(1,N):
-        for G in graphs.nauty_geng('-c ' + str(n)):
+    for k in range(3,K):
+        for G in graphs.nauty_geng('-c ' + str(k)):
             if not tau_test_convexity(G):
                 convexity = False
                 print("Convexity test failed:")
