@@ -4,9 +4,14 @@ The aim of this project is to verify and prove the Tau constant is convex as a
 function of the edge lengths of $G$
 
 The purpose of each file is as follows
-- `tau.sage` contains the functions and software used
-- `computations.sage` contains computations of examples using `tau.sage`. I
-  will try to keep a list of verified results in this README.
+- `tau.sage` contains functions relating to the calculation of the tau constant
+- `fosters_expressions.sage` contains various functions in terms of fosters
+  coefficients I wanted to test for convexity.
+- `computations.sage` contains computations of examples using `tau.sage` and
+  `fosters.sage`. I will try to keep a list of verified results in this README.
+- `output.txt` is the output of `computations.txt` via the command `sage
+  computations.sage >> output.txt`
+- `old/` contains old code I am no longer using.
 
 ### For a definition of the tau constant see the following
 - https://arxiv.org/abs/math/0407427
@@ -42,6 +47,7 @@ associated edge lengths of `G` (i.e. `z = polys.gens()`),
 3. The ladder graph $P_2 \times P_n$ up to $n = 7$ layers
 4. $B_n$ for any $n$ (proven)
 5. The cube graph $P_1^n = P_1 \times \dots \times P_1$ up to $n = 3$
+6. The Petersen Graph
 
 
 
