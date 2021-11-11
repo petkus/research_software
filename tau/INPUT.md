@@ -5,7 +5,7 @@ function of the edge lengths of $G$
 
 The purpose of each file is as follows
 - `tau.sage` contains the functions and software used
-- `computations.sage` contains computations of examples using 'tau.sage'. I
+- `computations.sage` contains computations of examples using `tau.sage`. I
   will try to keep a list of verified results in this README.
 
 ### For a definition of the tau constant see the following
@@ -45,7 +45,7 @@ associated edge lengths of `G` (i.e. `z = polys.gens()`),
 
 
 
-### Note for compiling Latex in README
+## Note for compiling Latex in README
 I am using the python script `readme2tex` (https://github.com/leegao/readme2tex). Just following the directions on their page was giving me troubles (it seemed to rely on RawGit https://rawgit.com/ which is shut down). Using the following command seems to work however!
 
 `python3 -m readme2tex --nocdn --readme INPUT.md --output README.md`

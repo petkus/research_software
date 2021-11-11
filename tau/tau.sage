@@ -7,55 +7,96 @@ def visualize(G):
     return H
 
 # Returns a ring of rational functions where the indeterminants are assigned to
-# the edge lengths of G
-def assignVariables(G):
+# the edge lengths of G. If n != 0, then there are n indeterminants assigned to
+# the edge lengths of G, assigned in a cyclic fashion based off the order of edges
+def assign_variables(G, n=0):
+    if n < 0:
+        raise ValueError("number of indeterminants must be nonegative")
+    if n == 0:
+        n = len(G.edges())
     G.allow_multiple_edges(True)
-    polys = PolynomialRing(QQ,len(G.edges()),"z").fraction_field()
+    polys = PolynomialRing(QQ,n,"z").fraction_field()
     z = polys.gens()
     i = 0
     for u,v in G.edges(labels=0):
-        G.set_edge_label(u,v,z[i])
+        G.set_edge_label(u,v,z[i%n])
         i += 1
     return polys
 
-# Implimenting https://onlinelibrary.wiley.com/doi/10.1002/net.1975.5.3.237
-# TODO  https://sci-hubtw.hkvisa.net/10.1002/net.1975.5.3.237
-# https://www.w3schools.com/python/python_iterators.asp
-def set_of_spanning_trees(G):
-    if not G.connected():
-        return {}
+# Assigns edge lengths according to the given list of lengths L
+def assign_lengths(G, L):
+    if len(G.edges()) != len(L):
+        raise ValueError("Number of given lengths is different than number of edges")
+    i = 0
+    for e in G.edges():
+        G.set_edge_label(e[0],e[1], L[i])
+        i += 1
+    return G
 
-# TODO
-def set_of_spanning_trees_helper(G):
-    return {}
+# Subdivides each edge of the input graph n times, then relabels vertices and
+# reassigns variables.  Returns the ring of rational functions with
+# indeterminants associated to edge lengths
+def subdivide(G,n):
+    for e in G.edges():
+        G.subdivide_edge(e, n)
+    G.relabel()
+    return assign_variables(G)
 
-# Tests whether the given function f is convex by randomly plotting points.
-# Param_num should be the number of input variables for f
-def convexity_test(f, param_num, lower_bound = 0, upper_bound = 1, test_num = 500):
+# Tests whether the given function f is convex by randomly plotting points
+# between lower_bound and upper_bound test_num number of times.
+# param_num should be the number of input variables for f. If param_num is 0
+# then param_num is automatically set to len(signature(f).parameters)).
+def convexity_test(f, param_num = 0, lower_bound = 0, upper_bound = 1, test_num
+                   = 60, printing = False):
     x1 = []
     x2 = []
+    if param_num == 0:
+        param_num = len(signature(f).parameters)
     for i in range(test_num):
-        x1 = [uniform(0,1) for i in range(param_num)]
-        x2 = [uniform(0,1) for i in range(param_num)]
+        x1 = [RealField(20)(uniform(0,1)) for i in range(param_num)]
+        x2 = [RealField(20)(uniform(0,1)) for i in range(param_num)]
         xm = [(x1[i] + x2[i])/2 for i in range(param_num)]
-        y1 = N((f(*x1) + f(*x2))/2, digits=6)
-        y2 = N(f(*xm), digits=6) - .000001
+        y1 = N((f(*x1) + f(*x2))/2, digits=3)
+        y2 = N(f(*xm), digits=3) - .001
         if y1 < y2:
-            print("Failed test: ")
-            print("y1 < y2 = " + str(y1 < y2))
-            print("x1 = " + str(x1))
-            print("x2 = " + str(x2))
-            print("xm = " + str(xm))
-            print("y1 = " + str(y1))
-            print("y2 = " + str(y2))
+            if printing:
+                print("Convexity test: False")
+                print("y1 < y2 = " + str(y1 < y2))
+                print("x1 = " + str(x1))
+                print("x2 = " + str(x2))
+                print("xm = (x1 + x2)/2 = " + str(xm))
+                print("y1 = (f(x1) + f(x2))/2 = " + str(y1))
+                print("y2 = f(xm) = " + str(y2))
             return False
+    if printing:
+        print("Convexity test: True")
     return True
+
+# Same as convexity_test but now F is a function which outputs a dictionary
+# indexed by edges E. dictionary_convexity_test outputs a dictionary with entries
+# of the form {e: True/False} based off if the eth entry passed a convexity test.
+def dictionary_convexity_test(F, E, lower_bound = 0, upper_bound =
+                              1, test_num = 60, printing = False):
+    x1 = []
+    x2 = []
+    E = [(e[0],e[1]) for e in E]
+    ans = {e:True for e in E}
+    for i in range(test_num):
+        x1 = [RealField(20)(uniform(0,1)) for e in E]
+        x2 = [RealField(20)(uniform(0,1)) for e in E]
+        xm = [(x1[i] + x2[i])/2 for i in range(len(E))]
+        F1 = F(*x1)
+        F2 = F(*x2)
+        Y1 = {e: (F1[e] + F2[e])/2 for e in E}
+        Y2 = F(*xm)
+        ans = {e: ans[e] and Y1[e] > Y2[e] for e in E}
+    return ans
         
 # Returns the laplacian_matrix with edge weights treated as resistances 
 # i.e L[i,i] = sum over e incident to i of 1/r(e)
 # i.e L[i,j] = 1/r(e) where e = (i,j)
 # polys should be a field containing indeterminants associated to the edge weights.
-def laplacian_matrix(G,polys):
+def laplacian_matrix(G,polys=RR):
     n = len(G.vertices())
     L = matrix(polys,n,n)
     for e in G.edges():
@@ -70,7 +111,7 @@ def laplacian_matrix(G,polys):
 # As done in 4.3 of https://arxiv.org/pdf/1810.02639.pdf
 # Returns the matrix with (x,y) entry equal to j_q(x,y)
 # polys is the fraction field containing the resistances on G
-def j_functions(q, G, polys):
+def j_functions(q, G, polys=RR):
     L = laplacian_matrix(G,polys)
     Lq = L.delete_columns([q]).delete_rows([q])
     n = Lq.dimensions()[0]
@@ -88,19 +129,45 @@ def j_functions(q, G, polys):
 def res(v,w,G, polys):
     return j_functions(v,G, polys)[w,w]
 
+# Returns effective resistance matrix whose [v,w] entry is the effective
+# resistance between vertices v and w
+# polys is the fraction field containing the resistances on G
+def resistance_matrix(G, J = None, polys = RR):
+    if J == None:
+        J = j_functions(0,G,polys)
+    n = len(G.vertices())
+    R = zero_matrix(polys,n)
+    for v in range(1,n):
+        R[0,v] = J[v,v]
+        R[v,0] = J[v,v]
+        for w in range(1,n):
+            R[v,w] = J[v,v] + J[w,w] - 2*J[v,w]
+    return R
+
 # Returns a dictionary of the Foster's coefficients 
 # of the form {e: fosters coefficient of e}
-def fosters(G):
+def fosters(G, R = None, labels = True, printing = False):
     W = 0
     E = set(G.edges())
-    F = {e:0 for e in G.edges()}
-    print("Calculating Fosters coefficients")
-    print("spanning_trees = %i" %G.spanning_trees_count())
-    count = 1
+    if R != None:
+        if labels:
+            F = {e:(1 - R[e[0],e[1]]/e[2]) for e in E}
+        else:
+            F = {(e[0],e[1]):(1 - R[e[0],e[1]]/e[2]) for e in E}
+        return F
+    if labels:
+        F = {e:0 for e in E}
+    else:
+        F = {(e[0],e[1]):0 for e in E}
+    if printing:
+        print("Calculating Fosters coefficients")
+        print("spanning_trees = %i" %G.spanning_trees_count())
+        count = 1
     for T in G.spanning_trees(labels = True):
-        if count % 10000 == 0:
-            print("count = %i" %count)
-        count += 1
+        if printing:
+            if count % 10000 == 0:
+                print("count = %i" %count)
+            count += 1
         p = 1
         S = E.copy()
         for s in T.edges():
@@ -110,9 +177,12 @@ def fosters(G):
             p *= w
         for e in S:
             w = e[2]
-            F[e] += p
+            if labels:
+                F[e] += p
+            else:
+                F[(e[0],e[1])] += p
         W += p
-    for e in G.edges():
+    for e in F.keys():
         F[e] = F[e]/W
     return F
 
@@ -122,8 +192,8 @@ def series_reduction(e, w, G):
     G = copy(G)
     r1 = e[2]
     r2 = w[2]
-    verticies = list({e[0], e[1]} ^^ {w[0], w[1]})
-    if len(verticies) != 2:
+    vertices = list({e[0], e[1]} ^^ {w[0], w[1]})
+    if len(vertices) != 2:
         print("Cannot perform series reduction (edges not incident)")
         return 
     v = list({e[0], e[1]} & {w[0], w[1]})[0]
@@ -132,7 +202,7 @@ def series_reduction(e, w, G):
         return
     G = copy(G)
     G.delete_edges([e,w])
-    G.add_edge(([verticies[0], verticies[1], r1 + r2]))
+    G.add_edge(([vertices[0], vertices[1], r1 + r2]))
     G.delete_vertex(v)
     return G
 
@@ -217,51 +287,64 @@ def delta_to_wye_reduction(e1,e2,e3, G):
     return G
 
 # Calculates one summand in theorem 10.2 of https://arxiv.org/pdf/1810.02639.pdf
-def tau_summand(e,F,J,polys):
-        return 1/12 * F[e]^2 * e[2] + 1/4 * (J[e[0],e[0]] - J[e[1],e[1]])^2/e[2]
+# e is a fixed edge, F is the fosters coefficients, polys is the ring of
+# rational functions
+def tau_first_summand(e,F,polys=RR):
+    return 1/12 * F[e]^2 * e[2]
+
+# Calculates one summand in theorem 10.2 of https://arxiv.org/pdf/1810.02639.pdf
+# e is a fixed edge, J is a j_functions matrix, polys is the ring of rational
+# functions
+def tau_second_summand(e,J,polys=RR):
+    return 1/4 * (J[e[0],e[0]] - J[e[1],e[1]])^2/e[2]
+
+# Calculates one summand in theorem 10.2 of https://arxiv.org/pdf/1810.02639.pdf
+# e is a fixed edge, F is the fosters coefficients, J is a j_functions matrix,
+# polys is the ring of rational functions
+def tau_summand(e,F,J,polys=RR):
+    return tau_first_summand(e,F,polys) + tau_second_summand(e,J,polys)
 
 # Using theorem 10.2 in https://arxiv.org/pdf/1810.02639.pdf
 # calculates the tau constant of a given graph with given fosters coefficients
 # Note that this algorithm is fast if the fosters coefficients are known
-def tau(G,F,polys):
-    s = 0
+def tau(G,polys=RR):
     q = G.vertices()[0]
     J = j_functions(q, G, polys)
+    R = resistance_matrix(G,J,polys)
+    F = fosters(G,R)
+    s = 0
     for e in G.edges():
         s += tau_summand(e,F,J,polys)
     return s
 
-# Returns a function whose inputs are indexed by a list zs and whose output is the
-# tau constant. Typically zs = polys.gens() should be the list of
-# indeterminants assigned to the edge lengths of G
-def tau_function(G,zs):
-    F = fosters(G)
-    i = 0
-    func = 1
-    def func(*args):
-        S = {zs[j]:args[j] for j in range(len(zs))}
-        Gc = G.copy()
-        Fc = {}
-        i = 0
-        for e in Gc.edges():
-            Gc.set_edge_label(e[0],e[1],S[e[2]])
-            Fc[(e[0],e[1],S[e[2]])] = F[e].substitute(S)
-        return tau(Gc,Fc,QQ)
+# Returns a function whose input is the lengths of G and whose output is the
+# input_function applied to G
+def to_function(input_function, G, e = None, labels = True):
+    if e == None:
+        def func(*args):
+            assign_lengths(G, args)
+            return input_function(G)
+    if e != None:
+        def func(*args):
+            assign_lengths(G, args)
+            return input_function(e,G)
+    if labels == False:
+        def func(*args):
+            assign_lengths(G, args)
+            return input_function(G, labels=False)
     return func
 
 # Tests the convexity of the tau constant for a given combinatorial graph G.
 def tau_test_convexity(G):
-    G.relabel()
-    polys = assignVariables(G)
-    z = polys.gens()
-    f = tau_function(G,z)
-    return convexity_test(f, len(z))
+    func = to_function(tau,G)
+    return convexity_test(func, len(G.edges()))
 
 # Finds the minimum value of tau for a given graph G with total length 1
 #TODO
 def tau_minimum(G):
     G.relabel()
-    polys = assignVariables(G)
+    polys = assign_variables(G)
     z = polys.gens()
     f = tau_function(G,z)
     
+
