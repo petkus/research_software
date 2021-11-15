@@ -46,18 +46,18 @@ def subdivide(G,n):
 # between lower_bound and upper_bound test_num number of times.
 # param_num should be the number of input variables for f. If param_num is 0
 # then param_num is automatically set to len(signature(f).parameters)).
-def convexity_test(f, param_num = 0, lower_bound = 0, upper_bound = 1, test_num
+def convexity_test(f, param_num = 0, lower_bound = 1, upper_bound = 2, test_num
                    = 100, printing = False):
     x1 = []
     x2 = []
     if param_num == 0:
         param_num = len(signature(f).parameters)
     for i in range(test_num):
-        x1 = [RealField(20)(uniform(0,1)) for i in range(param_num)]
-        x2 = [RealField(20)(uniform(0,1)) for i in range(param_num)]
+        x1 = [RealField(20)(uniform(lower_bound,upper_bound)) for i in range(param_num)]
+        x2 = [RealField(20)(uniform(lower_bound,upper_bound)) for i in range(param_num)]
         xm = [(x1[i] + x2[i])/2 for i in range(param_num)]
-        y1 = N((f(*x1) + f(*x2))/2, digits=3)
-        y2 = N(f(*xm), digits=3) - .001
+        y1 = (f(*x1) + f(*x2))/2
+        y2 = f(*xm) - .0000001
         if y1 < y2:
             if printing:
                 print("Convexity test: False")
@@ -73,23 +73,44 @@ def convexity_test(f, param_num = 0, lower_bound = 0, upper_bound = 1, test_num
     return True
 
 # Same as convexity_test but now F is a function which outputs a dictionary
-# indexed by edges E. dictionary_convexity_test outputs a dictionary with entries
-# of the form {e: True/False} based off if the eth entry passed a convexity test.
-def dictionary_convexity_test(F, E, lower_bound = 0, upper_bound =
-                              1, test_num = 60, printing = False):
+# indexed by edges E. convexity_test_edge_dictionary outputs a dictionary with
+# entries of the form {e: True/False} based off if the eth entry passed a
+# convexity test.
+def convexity_test_edge_dictionary(F, E, lower_bound = 1, upper_bound =
+                              2, test_num = 60, printing = False):
     x1 = []
     x2 = []
     E = [(e[0],e[1]) for e in E]
     ans = {e:True for e in E}
     for i in range(test_num):
-        x1 = [RealField(20)(uniform(0,1)) for e in E]
-        x2 = [RealField(20)(uniform(0,1)) for e in E]
+        x1 = [RealField(20)(uniform(lower_bound,upper_bound)) for e in E]
+        x2 = [RealField(20)(uniform(lower_bound,upper_bound)) for e in E]
         xm = [(x1[i] + x2[i])/2 for i in range(len(E))]
         F1 = F(*x1)
         F2 = F(*x2)
         Y1 = {e: (F1[e] + F2[e])/2 for e in E}
+        Y2 = F(*xm) 
+        ans = {e: ans[e] and Y1[e] > Y2[e] - .00000001 for e in E}
+    return ans
+
+# Same as convexity_test but now F is a function which outputs a dictionary
+# indexed by vertices V. convexity_test_vertex_dictionary outputs a dictionary
+# with entries of the form {v: True/False} based off if the vth entry passed a
+# convexity test.
+def convexity_test_vertex_dictionary(F, V, param_num, lower_bound = 1, upper_bound =
+                              2, test_num = 60, printing = False):
+    x1 = []
+    x2 = []
+    ans = {v:True for v in V}
+    for i in range(test_num):
+        x1 = [RealField(20)(uniform(lower_bound,upper_bound)) for k in range(param_num)]
+        x2 = [RealField(20)(uniform(lower_bound,upper_bound)) for k in range(param_num)]
+        xm = [(x1[k] + x2[k])/2 for k in range(param_num)]
+        F1 = F(*x1)
+        F2 = F(*x2)
+        Y1 = {v: (F1[v] + F2[v])/2 for v in V}
         Y2 = F(*xm)
-        ans = {e: ans[e] and Y1[e] > Y2[e] for e in E}
+        ans = {v: ans[v] and Y1[v] > Y2[v] - .00000001 for v in V}
     return ans
         
 # Returns the laplacian_matrix with edge weights treated as resistances 

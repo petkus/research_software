@@ -30,12 +30,13 @@ def diamond_necklace(t,a):
 # Computations:
 if True:
     # Complete Graphs
-    for n in range(4,10):
+    for n in range(7,10):
         G = graphs.CompleteGraph(n)
         print("Complete graph on %i verticies"%n)
         test(G)
         print()
 
+if False:
     # Complete Bipartite Graph
     for n in range(3,9):
         G = graphs.CompleteBipartiteGraph(n,n)
@@ -43,6 +44,7 @@ if True:
         test(G)
         print()
 
+if False:
     # Ladder Graphs
     for n in range(3,10):
         G = graphs.GridGraph([2,n])
@@ -51,6 +53,7 @@ if True:
         test(G)
         print()
 
+if False:
     # Grid Graphs
     for n in range(3,10):
         G = graphs.GridGraph([n,n])
@@ -59,6 +62,7 @@ if True:
         test(G)
         print()
 
+if False:
     # Wheel Graphs
     for n in range(3,15):
         G = graphs.WheelGraph(n)
@@ -67,6 +71,7 @@ if True:
         test(G)
         print()
 
+if True:
     # Petersen Graph
     G = graphs.PetersenGraph()
     G.relabel()
@@ -74,6 +79,7 @@ if True:
     test(G)
     print()
 
+if True:
     # Cube Graph
     for n in range(3,7):
         G = graphs.CubeGraph(n)
@@ -82,6 +88,7 @@ if True:
         test(G)
         print()
 
+if True:
     # Octahedral Graph
     G = graphs.OctahedralGraph()
     G.relabel()
@@ -89,12 +96,15 @@ if True:
     test(G)
     print()
 
+if True:
     # Tetrahedral Graph
     G = graphs.TetrahedralGraph()
     G.relabel()
     print("Tetrahedral Graph")
     test(G)
+    print()
 
+if True:
     # Dodecahedral Graph
     G = graphs.DodecahedralGraph()
     G.relabel()
@@ -102,7 +112,7 @@ if True:
     test(G)
     print()
 
-if False:
+if True:
     # Diamond Necklace
     t = 20
     if False:
