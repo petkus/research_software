@@ -33,6 +33,23 @@ def assign_lengths(G, L):
         i += 1
     return G
 
+# Removes vertices of degree two from model of metric graph
+def delete_two_degrees(G):
+    no_vertices = True
+    while no_vertices:
+        no_vertices = True
+        for v in G.vertices():
+            if G.degree(v) == 2:
+                no_vertices = False
+                e = G.neighbors(v)
+                l1 = G.edge_label(v,e[0])
+                l2 = G.edge_label(v,e[0])
+                G.delete_vertex(v)
+                G.add_edge(e[0],e[1])
+                if l1 != None and l2 != None:
+                    G.set_edge_label(e[0],e[1],l1 + l2)
+    return G
+
 # Subdivides each edge of the input graph n times, then relabels vertices and
 # reassigns variables.  Returns the ring of rational functions with
 # indeterminants associated to edge lengths
@@ -57,8 +74,8 @@ def convexity_test(f, param_num = 0, lower_bound = 1, upper_bound = 2, test_num
         x2 = [RealField(20)(uniform(lower_bound,upper_bound)) for i in range(param_num)]
         xm = [(x1[i] + x2[i])/2 for i in range(param_num)]
         y1 = (f(*x1) + f(*x2))/2
-        y2 = f(*xm) - .0000001
-        if y1 < y2:
+        y2 = f(*xm) - .01
+        if y1 <= y2:
             if printing:
                 print("Convexity test: False")
                 print("y1 < y2 = " + str(y1 < y2))
@@ -90,7 +107,7 @@ def convexity_test_edge_dictionary(F, E, lower_bound = 1, upper_bound =
         F2 = F(*x2)
         Y1 = {e: (F1[e] + F2[e])/2 for e in E}
         Y2 = F(*xm) 
-        ans = {e: ans[e] and Y1[e] > Y2[e] - .00000001 for e in E}
+        ans = {e: ans[e] and Y1[e] >= Y2[e] - .01 for e in E}
     return ans
 
 # Same as convexity_test but now F is a function which outputs a dictionary
@@ -110,7 +127,7 @@ def convexity_test_vertex_dictionary(F, V, param_num, lower_bound = 1, upper_bou
         F2 = F(*x2)
         Y1 = {v: (F1[v] + F2[v])/2 for v in V}
         Y2 = F(*xm)
-        ans = {v: ans[v] and Y1[v] > Y2[v] - .00000001 for v in V}
+        ans = {v: ans[v] and Y1[v] >= Y2[v] - .01 for v in V}
     return ans
         
 # Returns the laplacian_matrix with edge weights treated as resistances 
@@ -363,9 +380,9 @@ def to_function(input_function, G, e = False, F = False, labels = True):
     return func
 
 # Tests the convexity of the tau constant for a given combinatorial graph G.
-def tau_test_convexity(G):
+def tau_test_convexity(G, printing=False):
     func = to_function(tau,G)
-    return convexity_test(func, len(G.edges()))
+    return convexity_test(func, len(G.edges()), printing=printing)
 
 # Finds the minimum value of tau for a given graph G with total length 1
 #TODO

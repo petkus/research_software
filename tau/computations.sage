@@ -1,4 +1,4 @@
-load('fosters_expressions.sage')
+load('tests.sage')
 
 # Diamond Necklace Definition
 def diamond_necklace(t,a):
@@ -30,41 +30,52 @@ def diamond_necklace(t,a):
 # Computations:
 if True:
     # Complete Graphs
-    for n in range(7,10):
+    for n in range(5,8):
         G = graphs.CompleteGraph(n)
-        print("Complete graph on %i verticies"%n)
+        print("Complete graph on %i vertices"%n)
         test(G)
         print()
 
-if False:
+if True:
     # Complete Bipartite Graph
-    for n in range(3,9):
+    for n in range(3,6):
         G = graphs.CompleteBipartiteGraph(n,n)
-        print("Complete bipartite graph on (%i , %i) verticies"%(n,n))
+        print("Complete bipartite graph on (%i , %i) vertices"%(n,n))
         test(G)
         print()
 
-if False:
+if True:
     # Ladder Graphs
-    for n in range(3,10):
+    for n in range(3,6):
         G = graphs.GridGraph([2,n])
         G.relabel()
         print("Ladder graph with %i rows"%n)
         test(G)
         print()
 
-if False:
-    # Grid Graphs
-    for n in range(3,10):
+if True:
+    # 2d Grid Graphs
+    for n in range(3,6):
         G = graphs.GridGraph([n,n])
+        G = delete_two_degrees(G)
         G.relabel()
-        print("Grid graph with %i rows and columns"%n)
+        print("2d Grid graph with %i rows and columns"%n)
         test(G)
         print()
 
-if False:
+if True:
+    # 3d Grid Graphs
+    for n in range(3,6):
+        G = graphs.GridGraph([n,n,n])
+        G = delete_two_degrees(G)
+        G.relabel()
+        print("3d Grid graph with %i rows and columns"%n)
+        test(G)
+        print()
+
+if True:
     # Wheel Graphs
-    for n in range(3,15):
+    for n in range(3,10):
         G = graphs.WheelGraph(n)
         G.relabel()
         print("Wheel graph with %i spokes"%n)
@@ -112,7 +123,7 @@ if True:
     test(G)
     print()
 
-if True:
+if False:
     # Diamond Necklace
     t = 20
     if False:
@@ -129,6 +140,7 @@ if True:
     test(G)
     print()
 
+# All graphs
 if False:
     K = 11
     print("Testing Convexity for all graphs up to %i vertices"%K)
@@ -142,4 +154,5 @@ if False:
                 break
         if not convexity:
             break
+        print("verified for %i vertices"%k)
 
