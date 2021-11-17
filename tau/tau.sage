@@ -3,7 +3,12 @@ from sage.misc.prandom import uniform
 
 # Visualize graph G with assigned variables on each edge
 def visualize(G):
-    H = G.plot(edge_labels=True)
+    G.relabel()
+    options = {
+        'vertex_size':
+        # edge_labels = True,
+    }
+    H = G.plot(options)
     return H
 
 # Returns a ring of rational functions where the indeterminants are assigned to
@@ -34,6 +39,7 @@ def assign_lengths(G, L):
     return G
 
 # Removes vertices of degree two from model of metric graph
+# TODO
 def delete_two_degrees(G):
     no_vertices = True
     while no_vertices:
