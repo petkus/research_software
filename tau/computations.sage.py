@@ -34,7 +34,7 @@ def diamond_necklace(t,a):
     return(G)
 
 # Computations:
-if True:
+if False:
     # Complete Graphs
     for n in range(_sage_const_7 ,_sage_const_9 ):
         G = graphs.CompleteGraph(n)
@@ -43,7 +43,7 @@ if True:
         test(G)
         print()
 
-if True:
+if False:
     # Complete Bipartite Graph
     for n in range(_sage_const_5 ,_sage_const_7 ):
         G = graphs.CompleteBipartiteGraph(n,n)
@@ -52,7 +52,7 @@ if True:
         test(G)
         print()
 
-if True:
+if False:
     # Ladder Graphs
     for n in range(_sage_const_8 ,_sage_const_9 ):
         G = graphs.GridGraph([_sage_const_2 ,n])
@@ -62,7 +62,7 @@ if True:
         test(G)
         print()
 
-if True:
+if False:
     # 2d Grid Graphs
     for n in range(_sage_const_4 ,_sage_const_6 ):
         G = graphs.GridGraph([n,n])
@@ -72,7 +72,7 @@ if True:
         test(G)
         print()
 
-if True:
+if False:
     # 3d Grid Graphs
     for n in range(_sage_const_2 ,_sage_const_5 ):
         G = graphs.GridGraph([n,n,n])

@@ -5,8 +5,7 @@ from sage.misc.prandom import uniform
 def visualize(G):
     G.relabel()
     options = {
-        'vertex_size':
-        # edge_labels = True,
+        edge_labels: True
     }
     H = G.plot(options)
     return H

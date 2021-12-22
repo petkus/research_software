@@ -65,6 +65,51 @@ def both_terms_star(G):
         ans[e[1]] += (1/G.degree(e[1]) - 1/2 + 1/2 * e[2] * F[e]) * R[0,e[1]] + 1/12 * F[e]^2 * e[2]^2
     return ans
 
+def no_discrete_star(G):
+    R = resistance_matrix(G)
+    F = fosters(G,R)
+    ans = {v:0 for v in G.vertices()}
+    for e in G.edges():
+        ans[e[0]] += 1/12 * F[e]^2*e[2]^2 + 1/2*R[e[0],0]* e[2]* F[e]
+        ans[e[1]] += 1/12 * F[e]^2*e[2]^2 + 1/2*R[e[1],0]* e[2]* F[e]
+    return ans
+
+def first_derive_term(G):
+    R = resistance_matrix(G)
+    F = fosters(G,R)
+    ans = {v:0 for v in G.vertices()}
+    for e in G.edges():
+        ans[e[0]] += (1 - G.degree(e[0])/2 + 1/2 * e[2] * F[e])
+        ans[e[1]] += (1 - G.degree(e[1])/2 + 1/2 * e[2] * F[e])
+    return ans
+
+def first_derive_e_terms(G):
+    R = resistance_matrix(G)
+    F = fosters(G,R)
+    ans = {e:0 for v in G.edges()}
+    for e in G.edges():
+        ans[e] += (1/G.degree(e[0]) - 1/2 + 1/2 * e[2] * F[e])
+    return ans
+
+def no_F_L_2(G):
+    R = resistance_matrix(G)
+    F = fosters(G,R)
+    ans = {v:0 for v in G.vertices()}
+    for e in G.edges():
+        ans[e[0]] += (1 - G.degree(e[0])/2 + 1/2 * e[2] * F[e])*R[e[0],0]
+        ans[e[1]] += (1 - G.degree(e[1])/2 + 1/2 * e[2] * F[e])*R[e[1],0]
+    return ans
+
+def discrete_term(G):
+    R = resistance_matrix(G)
+    F = fosters(G,R)
+    ans = {v:0 for v in G.vertices()}
+    for e in G.edges():
+        ans[e[0]] += (1 - G.degree(e[0])/2) * R[e[0],0]
+        ans[e[1]] += (1 - G.degree(e[1])/2) * R[e[0],0]
+    return ans
+
+
 def log_of_tau(G):
     return log(tau(G))
 
@@ -95,86 +140,61 @@ def test(G):
     print("edges = " + str(E))
 
     # print()
-    # print("single integral second term without discrete")
-    # F = to_function(single_integral_second_term_without_discrete ,G)
-    # L = convexity_test_edge_dictionary(F,E)
-    # print("typical values: " + str(single_integral_second_term_without_discrete(G)))
-    # print("convex edges:")
-    # print({e for e in L.keys() if L[e]})
-
-    # print()
-    # print("single integral term without discrete")
-    # F = to_function(single_integral_term_without_discrete,G)
-    # L = convexity_test_edge_dictionary(F,E)
-    # print("typical values: " + str(single_integral_term_without_discrete(G)))
-    # print("convex edges:")
-    # print({e for e in L.keys() if L[e]})
-
-    # print()
-    # print("single integral second term")
-    # function = single_integral_second_term
+    # print("both terms star")
+    # function = both_terms_star
     # F = to_function( function ,G)
-    # L = convexity_test_edge_dictionary(F,E)
+    # L = convexity_test_vertex_dictionary(F,V,len(E))
     # print("typical values: " + str(function(G)))
-    # print("convex edges:")
-    # print({e for e in L.keys() if L[e]})
+    # print("non-convex vertices:")
+    # print({v for v in L.keys() if not L[v]})
 
     # print()
-    # print("single integral term")
-    # function = single_integral_term
-    # F = to_function( function ,G)
-    # L = convexity_test_edge_dictionary(F,E)
-    # print("typical values: " + str(function(G)))
-    # print("convex edges:")
-    # print({e for e in L.keys() if L[e]})
-
-    # print()
-    # print("F R l star")
+    # print("F_R_l star")
     # function = F_R_l_star
     # F = to_function( function ,G)
     # L = convexity_test_vertex_dictionary(F,V,len(E))
     # print("typical values: " + str(function(G)))
-    # print("convex vertices:")
-    # print({v for v in L.keys() if L[v]})
+    # print("non-convex vertices:")
+    # print({v for v in L.keys() if not L[v]})
 
     # print()
-    # print("second term star")
-    # function = second_term_star
+    # print("No discrete star")
+    # function = no_discrete_star
     # F = to_function( function ,G)
     # L = convexity_test_vertex_dictionary(F,V,len(E))
     # print("typical values: " + str(function(G)))
-    # print("convex vertices:")
-    # print({v for v in L.keys() if L[v]})
+    # print("non-convex vertices:")
+    # print({v for v in L.keys() if not L[v]})
+
+    # print()
+    # print("No F L 2")
+    # function = no_F_L_2
+    # F = to_function( function ,G)
+    # L = convexity_test_vertex_dictionary(F,V,len(E))
+    # print("typical values: " + str(function(G)))
+    # print("non-convex vertices:")
+    # print({v for v in L.keys() if not L[v]})
+
+    # print()
+    # print("firt derive term")
+    # function =  first_derive_term
+    # F = to_function( function ,G)
+    # L = convexity_test_vertex_dictionary(F,V,len(E))
+    # print("typical values: " + str(function(G)))
+    # print("non-convex vertices:")
+    # print({v for v in L.keys() if not L[v]})
 
     print()
-    print("both terms star")
-    function = both_terms_star
-    F = to_function( function ,G)
-    L = convexity_test_vertex_dictionary(F,V,len(E))
+    print("first_derive_e_terms")
+    F = to_function(first_derive_e_terms, G)
+    L = convexity_test_edge_dictionary(F,E)
     print("typical values: " + str(function(G)))
-    print("non-convex vertices:")
-    print({v for v in L.keys() if not L[v]})
 
-    print()
-    print("single integral without discrete")
-    function = single_integral_without_discrete
-    F = to_function( function ,G)
-    L = convexity_test(F,len(E))
-    print("typical values: " + str(function(G)))
-    print("convexity = ", str(L))
-
-    print()
-    print("single integral")
-    function = single_integral
-    F = to_function( function ,G)
-    L = convexity_test(F,len(E))
-    print("typical values: " + str(function(G)))
-    print("convexity = ", str(L))
-
-    print()
-    print("log of tau")
-    function = single_integral
-    F = to_function( function ,G)
-    L = convexity_test(F,len(E))
-    print("typical values: " + str(function(G)))
-    print("convexity = ", str(L))
+    # print()
+    # print("discrete term")
+    # function = discrete_term
+    # F = to_function( function ,G)
+    # L = convexity_test_vertex_dictionary(F,V,len(E))
+    # print("typical values: " + str(function(G)))
+    # print("non-convex vertices:")
+    # print({v for v in L.keys() if not L[v]})
