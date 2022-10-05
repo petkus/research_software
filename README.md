@@ -1,6 +1,7 @@
 # research_software
 
-This repository contains software I have used for research in mathematics. The description of each folder is as follows:
+This repository contains scripts I have used for research in mathematics. The
+description of each folder is as follows:
 - `tau` contains code used for researching the tau constant of a metric graph.
   All of the software is written in Sage.  I am currently working with this
 folder.

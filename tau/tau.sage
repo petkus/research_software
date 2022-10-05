@@ -2,12 +2,15 @@ from inspect import signature
 from sage.misc.prandom import uniform
 
 # Visualize graph G with assigned variables on each edge
-def visualize(G):
+def visualize(G, edge_function = None, vertex_function = None):
     G.relabel()
     options = {
-        edge_labels: True
+        'edge_labels': False,
+        'vertex_labels': False,
+        'color_by_label': True
     }
-    H = G.plot(options)
+    H = G.graphplot(**options)
+    H.show()
     return H
 
 # Returns a ring of rational functions where the indeterminants are assigned to
@@ -37,6 +40,13 @@ def assign_lengths(G, L):
         i += 1
     return G
 
+# Assigns edge lengths according to the given list of lengths L
+def assign_random_lengths(G):
+    for e in G.edges():
+        r = random()
+        G.set_edge_label(e[0],e[1], r)
+    return G
+
 # Removes vertices of degree two from model of metric graph
 # TODO
 def delete_two_degrees(G):
@@ -56,20 +66,28 @@ def delete_two_degrees(G):
     return G
 
 # Subdivides each edge of the input graph n times, then relabels vertices and
-# reassigns variables.  Returns the ring of rational functions with
-# indeterminants associated to edge lengths
+# labels each edge as 1/n times the length of the original edge
 def subdivide(G,n):
-    for e in G.edges():
-        G.subdivide_edge(e, n)
+    E = frozenset(G.edges())
+    for e in E:
+        x = e[0]
+        y = e[1]
+        G.delete_edge(e)
+        i = 1/n
+        G.add_edge(x, (x,y,i), e[2]/n)
+        for s in range(1,n-1):
+            G.add_edge((x,y,i), (x,y,i + 1/n), e[2]/n)
+            i += 1/n
+        G.add_edge((x,y,i), y, e[2]/n)
     G.relabel()
-    return assign_variables(G)
+    return G
 
 # Tests whether the given function f is convex by randomly plotting points
 # between lower_bound and upper_bound test_num number of times.
 # param_num should be the number of input variables for f. If param_num is 0
 # then param_num is automatically set to len(signature(f).parameters)).
 def convexity_test(f, param_num = 0, lower_bound = 1, upper_bound = 2, test_num
-                   = 100, printing = False):
+                   = 100, printing = True):
     x1 = []
     x2 = []
     if param_num == 0:
@@ -79,8 +97,8 @@ def convexity_test(f, param_num = 0, lower_bound = 1, upper_bound = 2, test_num
         x2 = [RealField(20)(uniform(lower_bound,upper_bound)) for i in range(param_num)]
         xm = [(x1[i] + x2[i])/2 for i in range(param_num)]
         y1 = (f(*x1) + f(*x2))/2
-        y2 = f(*xm) - .01
-        if y1 <= y2:
+        y2 = f(*xm)
+        if y1 < y2 - .0001:
             if printing:
                 print("Convexity test: False")
                 print("y1 < y2 = " + str(y1 < y2))
@@ -229,6 +247,19 @@ def fosters(G, R = None, labels = True, printing = False):
         F[e] = F[e]/W
     return F
 
+# Returns a dictionary of the curvature at each vertex 
+# of the form {v: curvature at v}
+def curvature(G, R = None):
+    C = {v:1 for v in G.vertices()}
+    if R == None:
+        R = resistance_matrix(G)
+    for e in G.edges():
+        v = e[0]
+        w = e[1]
+        C[v] -= 1/2 * R[v,w] / e[2]
+        C[w] -= 1/2 * R[v,w] / e[2]
+    return C
+
 # Performs series reduction to graph with edges e and w in series
 def series_reduction(e, w, G):
     G.allow_multiple_edges(True)
@@ -363,6 +394,7 @@ def tau(G,polys=RR):
 # Returns a function whose input is the lengths of G and whose output is the
 # input_function applied to G
 def to_function(input_function, G, e = False, F = False, labels = True):
+    G.relabel()
     if not (e and F) and labels:
         def func(*args):
             assign_lengths(G, args)
@@ -397,4 +429,17 @@ def tau_minimum(G):
     z = polys.gens()
     f = tau_function(G,z)
     
+
+def discrete_tau(G, n):
+    Gn = copy(G)
+    subdivide(Gn,n)
+    R = resistance_matrix(Gn)
+    nm = len(Gn.vertices())
+    s = 0
+    for v in Gn.vertices():
+        for w in Gn.vertices():
+            s += R[v,w]
+    return s/(2 * nm^2)
+
+
 

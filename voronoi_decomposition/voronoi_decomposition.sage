@@ -172,7 +172,7 @@ def complement_edges(T,G):
         return G.edges()
 
 # TODO CHECK IF TRUE
-# Returns the resulting tree from doing an edge exchange with the given
+# Returns the resulting tree from performing an edge exchange with the given
 # oriented tree T and edge e. If such an edge exchange is not possible (i.e. e
 # corresponds to a direction moving outside the voronoi polytope) then return
 # T.

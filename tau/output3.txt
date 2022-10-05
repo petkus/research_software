@@ -10,3 +10,9 @@ vertices = [0, 1, 2]
 edges = [(0, 1, None), (0, 2, None), (1, 2, None)]
 
 first_derive_e_terms
+***************************************************************************************
+Wheel graph with 3 spokes
+vertices = [0, 1, 2]
+edges = [(0, 1, None), (0, 2, None), (1, 2, None)]
+
+first_derive_e_terms

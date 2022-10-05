@@ -139,6 +139,13 @@ def test(G):
     print("vertices = " + str(V))
     print("edges = " + str(E))
 
+    print("")
+    function = tau
+    F = to_function( function ,G)
+    L = convexity_test(F,len(E))
+    print("typical values: " + str(function(G)))
+    print("convexity = ", str(L))
+
     # print()
     # print("both terms star")
     # function = both_terms_star
@@ -184,11 +191,31 @@ def test(G):
     # print("non-convex vertices:")
     # print({v for v in L.keys() if not L[v]})
 
-    print()
-    print("first_derive_e_terms")
-    F = to_function(first_derive_e_terms, G)
-    L = convexity_test_edge_dictionary(F,E)
-    print("typical values: " + str(function(G)))
+    # print()
+    # print("second term star")
+    # function =  second_term_star
+    # F = to_function( function ,G)
+    # L = convexity_test_vertex_dictionary(F,V,len(E))
+    # print("typical values: " + str(function(G)))
+    # print("non-convex vertices:")
+    # print({v for v in L.keys() if not L[v]})
+    # print()
+
+    # print()
+    # print("curvature")
+    # function =  curvature
+    # F = to_function( function ,G)
+    # L = convexity_test_vertex_dictionary(F,V,len(E))
+    # print("typical values: " + str(function(G)))
+    # print("non-convex vertices:")
+    # print({v for v in L.keys() if not L[v]})
+    # print()
+
+    # print()
+    # print("first_derive_e_terms")
+    # F = to_function(first_derive_e_terms, G)
+    # L = convexity_test_edge_dictionary(F,E)
+    # print("typical values: " + str(function(G)))
 
     # print()
     # print("discrete term")
